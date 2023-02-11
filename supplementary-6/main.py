@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.random import normal
 from progressbar import progressbar
-from scipy.integrate import BDF
+from scipy.integrate import BDF, RK45
 
 
 coupling_coefficients = np.array([[0, -0.1], [-0.1, 0]])
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     t_in_phases_opos = []
 
     for _ in progressbar(range(1000)):
-        out = BDF(generate_kramer_moyal(1.1, coupling_coefficients), 0, test, 1, max_step=0.01)
+        out = RK45(generate_kramer_moyal(1.1, coupling_coefficients), 0, test, 1) #, max_step=0.01)
 
         try:
             while out.status != 'finished':
