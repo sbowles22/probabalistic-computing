@@ -4,10 +4,9 @@ from numpy.random import normal
 from progressbar import progressbar
 from scipy.integrate import BDF, RK45
 
-
 coupling_coefficients = np.array([[0, -0.1], [-0.1, 0]])
 
-test = np.zeros(4)
+test = np.array([0.5, 0.5, 0, 0])
 
 
 def generate_kramer_moyal(p, zeta):
@@ -16,16 +15,19 @@ def generate_kramer_moyal(p, zeta):
         s = y[len(y) // 2:]
         dcdt = np.zeros(np.size(c))
         dsdt = np.zeros(np.size(s))
+        # print(y)
+        # print(c)
+        # print(s)
 
         for i, _ in enumerate(c):
             dcdt[i] += (-1 + p - (c[i] ** 2 + s[i] ** 2)) * c[i]
             dcdt[i] += sum((zeta[i][j] * c[j] for j, _ in enumerate(c)))
-            dcdt[i] += normal(0, 1)
+            # dcdt[i] += normal(0, 1)
 
         for i, _ in enumerate(s):
             dsdt[i] += (-1 + p - (c[i] ** 2 + s[i] ** 2)) * s[i]
             dsdt[i] += sum((zeta[i][j] * s[j] for j, _ in enumerate(s)))
-            dsdt[i] += normal(0, 1)
+            # dsdt[i] += normal(0, 1)
 
         return np.concatenate((dcdt, dsdt))
 
@@ -38,25 +40,38 @@ if __name__ == '__main__':
     in_phase_opo_2 = []
     t_in_phases_opos = []
 
-    for _ in progressbar(range(1000)):
-        out = RK45(generate_kramer_moyal(1.1, coupling_coefficients), 0, test, 1) #, max_step=0.01)
+    u = []
+    v = []
 
-        try:
-            while out.status != 'finished':
-                out.step()
-                # in_phase_opo_1.append(out.y[0])
-                # in_phase_opo_2.append(out.y[1])
-                # t_in_phases_opos.append(out.t)
+    x, y = np.meshgrid(np.linspace(-1, 1, 20), np.linspace(-1, 1, 20))
+    print(x)
+    for i, xi in enumerate(x):
+        for j, yi in enumerate(y):
+            out = generate_kramer_moyal(1.1, coupling_coefficients)(0, [xi, yi, 0, 0])
+            u.append(out[0])
+            v.append(out[1])
 
-            in_phase_opo_1.append(out.y[0])
-            in_phase_opo_2.append(out.y[1])
-        except:
-            pass
+    plt.quiver(x, y, u, v)
+
+    # for _ in progressbar(range(100)):
+    #     out = RK45(generate_kramer_moyal(1.1, coupling_coefficients), 0, test, 1) #, max_step=0.01)
+    #
+    #     try:
+    #         while out.status != 'finished':
+    #             out.step()
+    #             # in_phase_opo_1.append(out.y[0])
+    #             # in_phase_opo_2.append(out.y[1])
+    #             # t_in_phases_opos.append(out.t)
+    #
+    #         in_phase_opo_1.append(out.y[0])
+    #         in_phase_opo_2.append(out.y[1])
+    #     except:
+    #         pass
 
     # print(out.t)
     # print(out.y)
     fig, ax = plt.subplots()
-    ax.hist2d(in_phase_opo_1, in_phase_opo_2)
+    ax.hist2d(in_phase_opo_1, in_phase_opo_2, bins=10)
 
     # plt.scatter(in_phase_opo_1, in_phase_opo_2)  #, c=t_in_phases_opos)
     plt.show()
