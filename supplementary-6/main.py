@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import cm
 from numpy.random import normal
 from progressbar import progressbar
 from scipy.integrate import BDF, RK45
@@ -45,13 +46,27 @@ if __name__ == '__main__':
 
     x, y = np.meshgrid(np.linspace(-1, 1, 20), np.linspace(-1, 1, 20))
     print(x)
-    for i, xi in enumerate(x):
-        for j, yi in enumerate(y):
-            out = generate_kramer_moyal(1.1, coupling_coefficients)(0, [xi, yi, 0, 0])
-            u.append(out[0])
-            v.append(out[1])
+    print(y)
+    for i, _ in enumerate(x):
+        u_temp = []
+        v_temp = []
+        for j, _ in enumerate(y):
+            out = generate_kramer_moyal(1.1, coupling_coefficients)(0, [x[i][j], y[i][j], 0, 0])
+            u_temp.append(out[0])
+            v_temp.append(out[1])
+        u.append(u_temp)
+        v.append(v_temp)
+    u = np.array(u)
+    v = np.array(v)
 
-    plt.quiver(x, y, u, v)
+    colors = np.sqrt(np.power(u, 2) + np.power(v, 2))
+    u /= colors
+    v /= colors
+
+    print(cm.get_cmap('viridis', 12)(colors))
+
+    fig, ax = plt.subplots()
+    ax.quiver(x, y, u, v)
 
     # for _ in progressbar(range(100)):
     #     out = RK45(generate_kramer_moyal(1.1, coupling_coefficients), 0, test, 1) #, max_step=0.01)
@@ -70,8 +85,8 @@ if __name__ == '__main__':
 
     # print(out.t)
     # print(out.y)
-    fig, ax = plt.subplots()
-    ax.hist2d(in_phase_opo_1, in_phase_opo_2, bins=10)
+    # fig, ax = plt.subplots()
+    # ax.hist2d(in_phase_opo_1, in_phase_opo_2, bins=10)
 
     # plt.scatter(in_phase_opo_1, in_phase_opo_2)  #, c=t_in_phases_opos)
     plt.show()
