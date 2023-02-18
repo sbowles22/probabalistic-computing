@@ -4,6 +4,7 @@ from matplotlib import cm
 from numpy.random import normal
 from progressbar import progressbar
 from scipy.integrate import BDF, RK45
+import imageio
 
 coupling_coefficients = np.array([[0, -0.1], [-0.1, 0]])
 
@@ -35,8 +36,7 @@ def generate_kramer_moyal(p, zeta):
     return kramer_moyal
 
 
-if __name__ == '__main__':
-
+def vector_frame(p):
     in_phase_opo_1 = []
     in_phase_opo_2 = []
     t_in_phases_opos = []
@@ -45,13 +45,13 @@ if __name__ == '__main__':
     v = []
 
     x, y = np.meshgrid(np.linspace(-1, 1, 20), np.linspace(-1, 1, 20))
-    print(x)
-    print(y)
+    # print(x)
+    # print(y)
     for i, _ in enumerate(x):
         u_temp = []
         v_temp = []
         for j, _ in enumerate(y):
-            out = generate_kramer_moyal(1.1, coupling_coefficients)(0, [x[i][j], y[i][j], 0, 0])
+            out = generate_kramer_moyal(p, coupling_coefficients)(0, [x[i][j], y[i][j], 0, 0])
             u_temp.append(out[0])
             v_temp.append(out[1])
         u.append(u_temp)
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     u /= colors
     v /= colors
 
-    print(cm.get_cmap('viridis', 12)(colors))
+    # print(cm.get_cmap('viridis', 12)(colors))
 
     fig, ax = plt.subplots()
     ax.quiver(x, y, u, v)
@@ -89,7 +89,11 @@ if __name__ == '__main__':
     # ax.hist2d(in_phase_opo_1, in_phase_opo_2, bins=10)
 
     # plt.scatter(in_phase_opo_1, in_phase_opo_2)  #, c=t_in_phases_opos)
-    plt.show()
+    plt.savefig(f'./img/img_{p:.2f}.png',
+                transparent=False,
+                facecolor='white'
+                )
+    plt.close()
 
     # for i in range(100):
     #     # get solution step state
@@ -99,3 +103,18 @@ if __name__ == '__main__':
     #     # break loop after modeling is finished
     #     if solution.status == 'finished':
     #         break
+
+
+if __name__ == '__main__':
+    p_space = np.linspace(0.1, 2.0, 200)
+    for p in progressbar(p_space):
+        vector_frame(p)
+
+    frames = []
+    for p in p_space:
+        image = imageio.v2.imread(f'./img/img_{p:.2f}.png')
+        frames.append(image)
+
+    imageio.mimsave('./example.gif',  # output gif
+                    frames,  # array of input frames
+                    fps=30)  # optional: frames per second
