@@ -5,6 +5,7 @@ from numpy.random import normal
 from progressbar import progressbar
 from scipy.integrate import BDF, RK45
 import imageio
+from sdeint import *
 
 coupling_coefficients = np.array([[0, -0.1], [-0.1, 0]])
 
