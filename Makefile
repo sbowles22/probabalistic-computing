@@ -13,7 +13,7 @@ TESTFALGS = -DTEST_MAIN
 # EXEC_NAME is the name of the final executable
 EXEC_NAME = pcomp
 # SRCS is the names of all source dependenies
-SRCS = main.c graphs.c
+SRCS = main.c graphs.c utils.c
 OBJS = $(SRCS:%.c=%.o)
 
 $(EXEC_NAME): $(OBJS)
