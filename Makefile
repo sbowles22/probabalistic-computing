@@ -45,6 +45,15 @@ $(EXEC_TEST_NAME):
 run_tests:
 	./$(EXEC_TEST_NAME)
 
+# TESTING PROCESS
+# make testsuites.o
+# make testsuites
+# make run_tests
+#
+# Testing graohs.c is in separate file from utils.c tests
+# For list of tests check .h file
+
+
 # TODO Write unit tests, 
 # note that MAX_CUT of fully connected size 4 graph is 4, and of size 5 is 6
 # # Tests
