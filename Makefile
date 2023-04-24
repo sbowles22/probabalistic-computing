@@ -1,5 +1,5 @@
 # Basics
-WARNING = -Wall -Wshadow --pedantic
+WARNING = -Wall -Wshadow -Wno-unused-parameter --pedantic
 ERROR = -Wvla -Werror
 GCC = gcc -std=c99 -g $(WARNING) $(ERROR) -fopenmp
 VAL = valgrind --tool=memcheck --log-file=memcheck.txt --leak-check=full --verbose
@@ -39,8 +39,8 @@ testmemory: $(EXEC_NAME)
 test1: $(EXEC_NAME)
 	./$(EXEC_NAME)
 
-$(EXEC_TEST_NAME):
-	$(GCC) $(TESTFLAGS) $(OBJS_TEST) -o $(EXEC_TEST_NAME)
+$(EXEC_TEST_NAME): $(OBJS_TEST)
+	$(GCC) $(TESTFLAGS) $(OBJS_TEST) -o $(EXEC_TEST_NAME) -lm
 
 run_tests:
 	./$(EXEC_TEST_NAME)

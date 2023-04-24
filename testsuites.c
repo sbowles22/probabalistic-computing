@@ -28,5 +28,6 @@ int main(int argc, char** argv) {
 	
 	printf("\nTime Tests:\n");
 	utils_tests();
+	
 	return EXIT_SUCCESS;
 }
