@@ -1,9 +1,11 @@
 //
 //  Code for graphs
 //
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include "graphs.h"
+#include "utils.h"
 
 Graph* construct_graph(int size) {
   // Create Graph
@@ -44,6 +46,33 @@ Graph* construct_graph(int size) {
   return graph;
 }
 
+void print_adjacency_matrix(Graph graph) {
+  int i;
+  int j;
+  for (i = 0; i < graph.size; i++) {
+    for (j = 0; j < graph.size; j++) {
+      printf("%s%d ", graph.edges[i][j] ? KWHT : KGRN, graph.edges[i][j]);
+    }
+    printf("%s\n", KWHT);
+  }
+}
+
+Graph* random_mean_sparsity_graph(Graph* graph, double mean_sparsity) {
+  int i;
+  int j;
+  bool edge;
+  for (i = 0; i < graph -> size; i++) {
+    graph -> edges[i][i] = 0;
+    for (j = i + 1; j < graph -> size; j++) {
+      edge = mean_sparsity < rand_double();
+      graph -> edges[i][j] = edge;
+      graph -> edges[j][i] = edge;
+    }
+  }
+  return graph;
+}
+
+
 Graph random_cubic_graph(Graph graph, int size) {
   // TODO Write function
   return graph;
@@ -65,7 +94,7 @@ int max_cut(Graph graph) {
   if (partition_array == NULL) return -1;
   
   // Destination of max cut
-  int max_value;
+  int max_value = 0;
 
   _max_cut(graph, 0, partition_array, &max_value);
 

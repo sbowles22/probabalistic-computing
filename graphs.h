@@ -1,5 +1,6 @@
 #include <stdbool.h>
 
+// Graph constructed by adjacency matrix
 typedef struct {
   int size;
   int** edges; // n by n edge array
@@ -9,7 +10,11 @@ typedef struct {
 Graph* construct_graph(int size);
 void destruct_graph(Graph* graph);
 
-// Turn graph into random cubic graph
+// Print graph
+void print_adjacency_matrix(Graph graph); 
+
+// Random graph generators
+Graph* random_mean_sparsity_graph(Graph* graph, double mean_sparsity);
 Graph random_cubic_graph(Graph graph, int size);
 
 // Max cut function and helper
