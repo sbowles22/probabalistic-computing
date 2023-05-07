@@ -42,7 +42,7 @@ test1: $(EXEC_NAME)
 $(EXEC_TEST_NAME): $(OBJS_TEST)
 	$(GCC) $(TESTFLAGS) $(OBJS_TEST) -o $(EXEC_TEST_NAME) -lm
 
-run_tests:
+run_tests: $(EXEC_TEST_NAME) $(EXEC_TEST_NAME).o
 	./$(EXEC_TEST_NAME)
 
 # TESTING PROCESS
