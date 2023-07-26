@@ -7,32 +7,23 @@
 #include "utils.h"
 
 
-typedef union v64_union {
-  double f;
-  uint64_t u;
-} v64;
-
-void print_double_bits (double d) {
-  v64 v; v.f = d;
-  uint64_t mask = 1ULL << 63;
-  int count = 63;
-  do {
-    if (mask == 0x4000000000000000 || mask == 0x8000000000000) putchar(' ');
-    putchar(v.u & mask ? '1' : '0');
-    count--;
-  } while (mask >>= 1);
-}
-
 int main(int argc, char ** argv) {
-  
-  double res;
-  for (int i = 0; i < 10; i++) {
-    res = rand_double();
-    print_double_bits(res);
-    // print_double_bits(res);
-    printf("\n%f\n", res);
+
+  Graph* graph;
+  int max_cut_for_graph;
+  for (int i = 0; i < 1; i++) {
+    graph = construct_graph(24);
+    graph = random_mean_sparsity_graph(graph, 0.95);
+    print_adjacency_matrix(*graph);
+    
+    max_cut_for_graph = max_cut(*graph);
+    graph -> edges[0][0] = max_cut_for_graph;
+    printf("MAX-CUT: %s%d%s\n", KYEL, max_cut_for_graph, KWHT);
+
+    destruct_graph(graph);
+    printf("\n");
   }
-  
+
   /*
 #pragma omp parallel 
 {
