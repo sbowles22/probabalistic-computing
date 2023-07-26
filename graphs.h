@@ -1,3 +1,5 @@
+#ifndef __GRAPHS_H__
+#define __GRAPHS_H__
 #include <stdbool.h>
 
 // Graph constructed by adjacency matrix
@@ -22,3 +24,4 @@ int max_cut(Graph graph);
 void _max_cut(Graph graph, int node, int* partition_array, int* p_max_value); 
 int evaluate_cut(Graph graph, int* partition_array);
 
+#endif

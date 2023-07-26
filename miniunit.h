@@ -1,7 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include "log_macros.h"
 
 #ifndef __MINIUNIT_H__
 #define __MINIUNIT_H__
