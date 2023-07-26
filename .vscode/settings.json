@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "array": "c",
+        "hash_map": "c",
+        "bitset": "c",
+        "initializer_list": "c"
+    }
+}

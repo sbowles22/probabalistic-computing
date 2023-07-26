@@ -61,7 +61,7 @@ def generate_kramer_moyal(p, zeta):
             dcdt[i] += sum((zeta[i][j] * c[j] for j, _ in enumerate(c)))
 
         for i, _ in enumerate(s):
-            dsdt[i] += (-1 + p - (c[i] ** 2 + s[i] ** 2)) * s[i]
+            dsdt[i] += (-1 - p - (c[i] ** 2 + s[i] ** 2)) * s[i]
             dsdt[i] += sum((zeta[i][j] * s[j] for j, _ in enumerate(s)))
 
         return np.concatenate((dcdt, dsdt))

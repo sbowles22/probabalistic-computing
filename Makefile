@@ -1,7 +1,7 @@
 # Basics
 WARNING = -Wall -Wshadow -Wno-unused-parameter --pedantic
 ERROR = -Wvla -Werror
-GCC = gcc -std=c99 -g $(WARNING) $(ERROR) -fopenmp
+GCC = gcc -std=c99 -g $(WARNING) $(ERROR) -fopenmp -lm
 VAL = valgrind --tool=memcheck --log-file=memcheck.txt --leak-check=full --verbose
 
 # Defines number of threads
@@ -17,7 +17,7 @@ EXEC_NAME = pcomp
 EXEC_TEST_NAME = testsuites
 
 # SRCS is the names of all source dependenies
-SRCS = main.c graphs.c utils.c
+SRCS = main.c graphs.c utils.c network.c
 OBJS = $(SRCS:%.c=%.o)
 
 #SRCS_TEST is the source dependencies for the testsuites
@@ -40,7 +40,7 @@ test1: $(EXEC_NAME)
 	./$(EXEC_NAME)
 
 $(EXEC_TEST_NAME): $(OBJS_TEST)
-	$(GCC) $(TESTFLAGS) $(OBJS_TEST) -o $(EXEC_TEST_NAME) -lm
+	$(GCC) $(TESTFLAGS) $(OBJS_TEST) -o $(EXEC_TEST_NAME)
 
 run_tests: $(EXEC_TEST_NAME) $(EXEC_TEST_NAME).o
 	./$(EXEC_TEST_NAME)
