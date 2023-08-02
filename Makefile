@@ -36,7 +36,7 @@ testmemory: $(EXEC_NAME)
 	$(VAL) ./$(EXEC_NAME) 
 # testing only input3 and output3
 
-test1: $(EXEC_NAME)
+run: $(EXEC_NAME)
 	./$(EXEC_NAME)
 
 $(EXEC_TEST_NAME): $(OBJS_TEST)
