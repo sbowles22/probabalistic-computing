@@ -29,7 +29,7 @@ typedef void (*Solver) (Network* network, double h);
 typedef void (*Gradient) (Network* network);
 
 // Constructors and destructors
-Network* construct_network_from_graph(double p, double coupling_strength, double noise, Graph graph, Gradient gradient, Solver solver);
+Network* construct_network_from_graph(double p, double coupling_strength, double noise, Graph* graph, Gradient gradient, Solver solver);
 void destruct_network(Network* network);
 
 // Functions for preparing Network for simulation

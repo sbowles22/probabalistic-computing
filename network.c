@@ -6,12 +6,14 @@
 #include "network.h"
 #include "utils.h"
 
-Network* construct_network_from_graph(double p, double coupling_strength, double noise, Graph graph, Gradient gradient, Solver solver) {
+Network* construct_network_from_graph(double p, double coupling_strength, double noise, Graph* graph, Gradient gradient, Solver solver) {
   // Create Network
   Network* network = malloc(sizeof(Network));
   if (network == NULL) return NULL;
   
-  int size = graph.size;
+  int i;
+  int j;
+  int size = graph -> size;
   network -> size = size;
   network -> p = p;
   network -> noise = noise;
@@ -73,7 +75,6 @@ Network* construct_network_from_graph(double p, double coupling_strength, double
   }
   
   // Allocate memory for coupling subarrays
-  int i;
   for (i = 0; i < size; i++) {
     (network -> couplings)[i] = malloc(sizeof(double) * size);
   }
@@ -110,10 +111,17 @@ Network* construct_network_from_graph(double p, double coupling_strength, double
 
   // Initialize network amplitudes to 0
   for (i = 0; i < size; i++) {
-    (network -> c)[i] = 0.1;
+    (network -> c)[i] = 0.0;
     (network -> s)[i] = 0.0;
   }
   // printf("%lf\n", (network -> amplitudes)[0]);
+
+  for (i = 0; i < size; i++) {
+    for (j = 0; j < size; j++) {
+      int edge = (graph -> edges)[i][j];
+      (network -> couplings)[i][j] = -coupling_strength * edge;
+    }
+  }
 
   return network;
 }
@@ -180,6 +188,7 @@ void euler_maruyama(Network* network, double h) {
   (network -> gradient)(network);
 
   for (int i = 0; i < network -> size; i++) {
+    // printf("C[%d] = %lf :: DCDT[%d] = %lf\n", i, c[i], i, dcdt[i]);
     c[i] += dcdt[i] * h + (network -> noise) * rand_norm(0, sqrt_h);
   }
 
@@ -193,8 +202,12 @@ void network_run(Network* network, double time_final, int steps) {
     perror("Run cannot have ZERO steps");
     exit(1);
   }
+
+  for (int i = 0; i < network -> size; i++) {
+    (network -> c)[i] = 0.0;
+    (network -> s)[i] = 0.0;
+  }
   
-  // double time = 0;
   double h = time_final / (double) steps;
   for (int i = 0; i < steps; i++) {
     (network -> solver)(network, h);
