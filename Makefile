@@ -36,6 +36,10 @@ testmemory: $(EXEC_NAME)
 	$(VAL) ./$(EXEC_NAME) 
 # testing only input3 and output3
 
+points: $(EXEC_NAME)
+	./$(EXEC_NAME) > points.txt
+	python3 scripts/vis.py points.txt
+
 run: $(EXEC_NAME)
 	./$(EXEC_NAME)
 

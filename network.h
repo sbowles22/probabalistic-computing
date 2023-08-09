@@ -8,11 +8,18 @@
 
 typedef struct _Network {
   int size;            // size of network
-  double p;            // normalized_pump_rate
-  double** couplings;  // size by size array of couplings between OPOs
   double sim_time;     // simulation time
-  double* amplitudes;  // 2*size array of state of amplitudes, organized [c1,...,cn,s1,...sn]
-  double* dadt;        // 2*size array of state of amplitude differentials, organized [c1,...,cn,s1,...sn]
+
+  double p;            // normalized_pump_rate
+  double noise;        // normalized noise
+
+  double** couplings;  // size by size array of couplings between OPOs
+  double* c;           // size array of state of amplitudes, organized [c1,...,cn]
+  double* s;           // size array of state of amplitudes, organized [s1,...sn]
+  double* dcdt;        // size array of state of amplitude differentials, organized [dc1,...,dcn]
+  double* dsdt;        // size array of state of amplitude differentials, organized [ds1,...,dsn]
+
+  int* partition_array; // Array for cut
 
   void (*solver) (struct _Network* network, double h); // SDE Integrator
   void (*gradient) (struct _Network* network);         // Generates the current dA/dt using kramer moyal 
@@ -22,10 +29,14 @@ typedef void (*Solver) (Network* network, double h);
 typedef void (*Gradient) (Network* network);
 
 // Constructors and destructors
-Network* construct_network_from_graph(double p, double coupling_strength, Graph graph, Gradient gradient, Solver solver);
+Network* construct_network_from_graph(double p, double coupling_strength, double noise, Graph graph, Gradient gradient, Solver solver);
 void destruct_network(Network* network);
 
 // Functions for preparing Network for simulation
 void reset_network_state(Network* network);
 
 void kraymer_moyal (Network* network);
+void euler_maruyama(Network* network, double h);
+
+void network_run(Network* network, double time_final, int steps);
+void network_get_partition_array(Network* network);
