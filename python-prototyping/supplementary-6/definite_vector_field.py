@@ -107,15 +107,17 @@ def vector_frame(p):
 
 
 if __name__ == '__main__':
-    p_space = np.linspace(0.1, 2.0, 200)
-    for p in progressbar(p_space):
-        vector_frame(p)
-
-    frames = []
-    for p in p_space:
-        image = imageio.v2.imread(f'./img/img_{p:.2f}.png')
-        frames.append(image)
-
-    imageio.mimsave('./example.gif',  # output gif
-                    frames,  # array of input frames
-                    fps=30)  # optional: frames per second
+    vector_frame(0.9)
+    vector_frame(1.1)
+    # p_space = np.linspace(0.1, 2.0, 200)
+    # for p in progressbar(p_space):
+    #     vector_frame(p)
+    #
+    # frames = []
+    # for p in p_space:
+    #     image = imageio.v2.imread(f'./img/img_{p:.2f}.png')
+    #     frames.append(image)
+    #
+    # imageio.mimsave('./example.gif',  # output gif
+    #                 frames,  # array of input frames
+    #                 fps=30)  # optional: frames per second
