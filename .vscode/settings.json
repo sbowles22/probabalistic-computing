@@ -4,5 +4,6 @@
         "hash_map": "c",
         "bitset": "c",
         "initializer_list": "c"
-    }
+    },
+    "C_Cpp.default.compilerPath": "/usr/lib64/ccache/gcc"
 }

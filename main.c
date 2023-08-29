@@ -14,17 +14,17 @@ int main(int argc, char ** argv) {
   Network* network;
   int max_cut_for_graph;
   for (int i = 0; i < 1; i++) {
-    graph = construct_graph(2);
-    graph = random_mean_sparsity_graph(graph, 0.0);
+    graph = construct_graph(24);
+    graph = random_mean_sparsity_graph(graph, 0.3);
 
     // graph = construct_graph(40);
     // graph = random_mean_sparsity_graph(graph, 0.7);
-    // print_adjacency_matrix(*graph);
+    print_adjacency_matrix(*graph);
     
     max_cut_for_graph = max_cut(*graph);
-    // printf("MAX-CUT: %s%d%s\n", KYEL, max_cut_for_graph, KWHT);
+    printf("MAX-CUT: %s%d%s\n", KYEL, max_cut_for_graph, KWHT);
 
-    network = construct_network_from_graph(1.1, 0.1, 0.01, graph, &kraymer_moyal, &euler_maruyama);
+    network = construct_network_from_graph(0.9, 0.1, 0.001, graph, &kraymer_moyal, &euler_maruyama);
 
     // FILE* u = fopen("u.txt", "w");
     // FILE* v = fopen("v.txt", "w");
@@ -45,17 +45,18 @@ int main(int argc, char ** argv) {
 
     int cut;
     int success = 0; 
-    for (int j = 0; j < 200; j++) {
+    int trials = 200;
+    for (int j = 0; j < trials; j++) {
       // (network -> gradient)(network);
       // (network -> solver)(network, 0.01);
-      network_run(network, 100.0, 100000);
+      network_run(network, 1000.0, 10000);
       network_get_partition_array(network);
       cut = evaluate_cut(*graph, network -> partition_array);
       // printf("%+d %+d %d\n", (network -> partition_array)[0], (network -> partition_array)[1], cut);
-      printf("%lf %lf\n", (network -> c)[0], (network -> c)[1]);
+      // printf("%lf %lf\n", (network -> c)[0], (network -> c)[1]);
       success += cut == max_cut_for_graph;
     }
-    // printf("Accuracy: %.2f%%\n", (float) success);
+    printf("Accuracy: %.2f%%\n", (float) success / trials * 100);
     
     // for (int j = 0; j < (network -> size); j++) {
     //   printf("%lf", (network -> c)[j]);
