@@ -1,2 +1,3 @@
 *.o
 memcheck.txt
+pcomp
