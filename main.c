@@ -7,10 +7,11 @@
 #include "network.h"
 #include "utils.h"
 
-#define MIN_GRAPH_SIZE 2
-#define MAX_GRAPH_SIZE 22
-#define MEAN_SPARSITY 0.5
-#define GRAPHS_PER_SIZE 1000
+#define GRAPH_SIZE 16
+#define MEAN_SPARSITY_MIN 0.01
+#define MEAN_SPARSITY_MAX 0.99
+#define MEAN_SPARSITY_INC 0.01
+#define GRAPHS_PER_SPARSITY 200
 #define TRIALS_PER_GRAPH 400
 
 #define END_TIME 100.0
@@ -26,11 +27,11 @@ int main(int argc, char ** argv) {
   Network* network;
   int max_cut_for_graph;
   
-  for (int size = MIN_GRAPH_SIZE; size <= MAX_GRAPH_SIZE; size++) {
+  for (float sparsity = MEAN_SPARSITY_MIN; sparsity <= MEAN_SPARSITY_MAX; sparsity += MEAN_SPARSITY_INC) {
     int success = 0; 
-    for (int _gn = 0; _gn < GRAPHS_PER_SIZE; _gn++) {
-      graph = construct_graph(size);
-      graph = random_mean_sparsity_graph(graph, MEAN_SPARSITY);
+    for (int _gn = 0; _gn < GRAPHS_PER_SPARSITY; _gn++) {
+      graph = construct_graph(GRAPH_SIZE);
+      graph = random_mean_sparsity_graph(graph, sparsity);
 
       // print_adjacency_matrix(*graph);
       
@@ -49,6 +50,6 @@ int main(int argc, char ** argv) {
       destruct_network(network);
     }
     
-    printf("%d %.4f\n", size, (float) success / (TRIALS_PER_GRAPH * GRAPHS_PER_SIZE));
+    printf("%.2f %.4f\n", sparsity, (float) success / (TRIALS_PER_GRAPH * GRAPHS_PER_SPARSITY));
   }
 }
