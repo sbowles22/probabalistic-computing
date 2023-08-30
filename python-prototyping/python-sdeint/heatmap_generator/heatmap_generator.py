@@ -14,7 +14,7 @@ import imageio
 from sdeint import *
 import imageio
 
-runs = 10000
+runs = 1000
 
 coupling_coefficients = np.array([[0, -0.1], [-0.1, 0]])
 
@@ -38,7 +38,7 @@ def generate_kramer_moyal(p, zeta):
             # dcdt[i] += normal(0, 1)
 
         for i, _ in enumerate(s):
-            dsdt[i] += (-1 + p - (c[i] ** 2 + s[i] ** 2)) * s[i]
+            dsdt[i] += (-1 - p - (c[i] ** 2 + s[i] ** 2)) * s[i]
             dsdt[i] += sum((zeta[i][j] * s[j] for j, _ in enumerate(s)))
             # dsdt[i] += normal(0, 1)
 
@@ -61,7 +61,8 @@ def gen_quantum_noise(q):
 
 if __name__ == '__main__':
 
-    for noise in [1, 0.1, 0.01, 0.001, 0.0001, 0.00001]:
+    # for noise in [1, 0.1, 0.01, 0.001, 0.0001, 0.00001]:
+    for noise in [0.1]:
         print('---')
         print(f'Computing Noise {noise}...\n')
         xa = [[] for i in range(100)]
@@ -94,8 +95,8 @@ if __name__ == '__main__':
             fig, ax = plt.subplots()
             ax.scatter(xa[i-1][:100], ya[i-1][:100])
             ax.set_title(f'Noise={noise:.0E}, t={i/10:.1f}')
-            ax.set_xlim(-0.5, 0.5)
-            ax.set_ylim(-0.5, 0.5)
+            ax.set_xlim(-0.6, 0.6)
+            ax.set_ylim(-0.6, 0.6)
             # ax.scatter(xb, yb)
             plt.savefig(f'{i}.png')
             plt.close()
@@ -114,8 +115,8 @@ if __name__ == '__main__':
                        norm=colors.LogNorm(),
                        cmap="gray")
             ax.set_title(f'Noise={noise:.0E}, t={i / 10:.1f}')
-            ax.set_xlim(-0.5, 0.5)
-            ax.set_ylim(-0.5, 0.5)
+            ax.set_xlim(-0.7, 0.7)
+            ax.set_ylim(-0.7, 0.7)
             # ax.scatter(xb, yb)
             plt.savefig(f'{i}.png')
             plt.close()
