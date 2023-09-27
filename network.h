@@ -38,5 +38,5 @@ void reset_network_state(Network* network);
 void kraymer_moyal (Network* network);
 void euler_maruyama(Network* network, double h);
 
-void network_run(Network* network, double time_final, int steps);
+void network_run(Network* network, Graph* graph, double time_final, int steps);
 void network_get_partition_array(Network* network);

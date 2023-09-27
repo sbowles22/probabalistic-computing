@@ -21,4 +21,7 @@ double rand_double(void);
 // Random normal number generators
 double rand_norm(double mean, double std_dev);
 
+// Progressbar 
+void print_progress(size_t count, size_t max);
+
 #endif

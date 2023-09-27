@@ -3,7 +3,9 @@
         "array": "c",
         "hash_map": "c",
         "bitset": "c",
-        "initializer_list": "c"
+        "initializer_list": "c",
+        "algorithm": "c",
+        "random": "c"
     },
     "C_Cpp.default.compilerPath": "/usr/lib64/ccache/gcc"
 }

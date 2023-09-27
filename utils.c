@@ -5,8 +5,11 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 #include <math.h>
+#include "utils.h"
 #include "xoshiro256plus.c"
 
 #define M_PI 3.14159265358979323846
@@ -64,6 +67,7 @@ double rand_double(void) {
 //
 
 static double _rand_normal_holding[3] = {NAN, NAN, NAN}; // holds extra double generated, should be struct but im lazy
+#pragma omp threadprivate(_rand_normal_holding)
 
 double rand_norm(double mean, double std_dev) {
   double rand_normal;
@@ -88,4 +92,25 @@ double rand_norm(double mean, double std_dev) {
   _rand_normal_holding[2] = std_dev;
   
   return rand_normal;
+}
+
+void print_progress(size_t count, size_t max)
+{
+	const char prefix[] = "Progress: [";
+	const char suffix[] = "]";
+	const size_t prefix_length = sizeof(prefix) - 1;
+	const size_t suffix_length = sizeof(suffix) - 1;
+	char *buffer = calloc(max + prefix_length + suffix_length + 1, 1); // +1 for \0
+	size_t i = 0;
+
+	strcpy(buffer, prefix);
+	for (; i < max; ++i)
+	{
+		buffer[prefix_length + i] = i < count ? '#' : ' ';
+	}
+
+	strcpy(&buffer[prefix_length + i], suffix);
+	printf("\b%c[2K\r%s\n", 27, buffer);
+	fflush(stdout);
+	free(buffer);
 }
