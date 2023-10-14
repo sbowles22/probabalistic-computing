@@ -1,7 +1,7 @@
 # Basics
 WARNING = -Wall -Wshadow -Wno-unused-parameter --pedantic
 ERROR = -Wvla -Werror
-GCC = gcc -std=c99 -g $(WARNING) $(ERROR) -fopenmp -lm
+GCC = gcc -std=c99 $(WARNING) $(ERROR) -fopenmp -lm
 VAL = valgrind --tool=memcheck --log-file=memcheck.txt --leak-check=full --verbose
 
 # Defines number of threads
@@ -26,8 +26,11 @@ SRCS_TEST = $(TESTS_C) graphs.c utils.c
 OBJS_TEST = $(SRCS_TEST:%.c=%.o)
 
 $(EXEC_NAME): $(OBJS)
-	$(GCC) $(TESTFLAGS) $(OBJS) -o $(EXEC_NAME)
+	$(GCC) -g $(TESTFLAGS) $(OBJS) -o $(EXEC_NAME)
 # echo $(OBJS)
+
+o_$(EXEC_NAME): clean
+	$(GCC) -O3 $(SRCS) -o $(EXEC_NAME)
 
 .c.o:
 	$(GCC) $(TESTFLAGS) -c $*.c

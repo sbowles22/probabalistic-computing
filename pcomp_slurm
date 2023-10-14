@@ -1,0 +1,16 @@
+#!/bin/bash
+# FILENAME:  pcomp_slurm
+
+#SBATCH -A pbermel
+#SBATCH --nodes=1
+#SBATCH --time=240:00:00
+
+# Change to the directory from which you originally submitted this job.
+cd $SLURM_SUBMIT_DIR
+
+# Compile
+make o_pcomp
+
+# Run
+./pcomp
+
