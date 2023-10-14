@@ -8,7 +8,7 @@
 #include "network.h"
 #include "utils.h"
 
-#define GRAPH_SIZE 100000
+#define GRAPH_SIZE 10000
 #define MEAN_SPARSITY_MIN 0.01
 #define MEAN_SPARSITY_MAX 0.99
 #define MEAN_SPARSITY_INC 0.01
@@ -23,7 +23,7 @@
 #define NOISE 0.001
 
 int main(int argc, char ** argv) {
-  omp_set_num_threads(64);
+  omp_set_num_threads(1);
 
   Graph* graph;
   Network* network;
@@ -41,41 +41,5 @@ int main(int argc, char ** argv) {
 
   destruct_graph(graph);
   destruct_network(network);
-
-  // omp_set_num_threads(4);
-
-  // #pragma omp parallel 
-  // {
-  //   Graph* graph;
-  //   Network* network;
-  //   int max_cut_for_graph;
-    
-  //   for (float sparsity = MEAN_SPARSITY_MIN; sparsity <= MEAN_SPARSITY_MAX; sparsity += MEAN_SPARSITY_INC) {
-      
-      
-  //     int success = 0; 
-  //     for (int _gn = 0; _gn < GRAPHS_PER_SPARSITY; _gn++) {
-  //       graph = construct_graph(GRAPH_SIZE);
-  //       graph = random_mean_sparsity_graph(graph, sparsity);
-
-  //       // print_adjacency_matrix(*graph);
-        
-  //       max_cut_for_graph = max_cut(*graph);
-  //       network = construct_network_from_graph(PUMP_RATE, COUPLING_COEFFICIENT, NOISE, graph, &kraymer_moyal, &euler_maruyama);
-
-  //       int cut;
-  //       for (int _tr = 0; _tr < TRIALS_PER_GRAPH; _tr++) {
-  //         network_run(network, END_TIME, STEPS);
-  //         network_get_partition_array(network);
-  //         cut = evaluate_cut(*graph, network -> partition_array);
-  //         success += cut == max_cut_for_graph;
-  //       }
-
-  //       destruct_graph(graph);
-  //       destruct_network(network);
-  //     }
-      
-  //     printf("%.2f %.4f\n", sparsity, (float) success / (TRIALS_PER_GRAPH * GRAPHS_PER_SPARSITY));
-  //   }
-  // }
 }
+

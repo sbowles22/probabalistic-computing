@@ -13,7 +13,7 @@ Graph* construct_graph(int size) {
   if (graph == NULL) return NULL;
   
   graph -> size = size;
-  graph -> edges = malloc(sizeof(int*) * size);
+  graph -> edges = malloc(sizeof(graph -> edges[0]) * size);
   if (graph -> edges == NULL) {
     free(graph);
     return NULL;
@@ -22,7 +22,7 @@ Graph* construct_graph(int size) {
   // Allocate memory for subarrays
   int i;
   for (i = 0; i < size; i++) {
-    (graph -> edges)[i] = malloc(sizeof(int) * size);
+    (graph -> edges)[i] = malloc(sizeof(graph -> edges[i][0]) * size);
   }
 
   // If any mallocs were unsuccessful, 

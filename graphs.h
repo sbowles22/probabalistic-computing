@@ -5,7 +5,7 @@
 // Graph constructed by adjacency matrix
 typedef struct {
   int size;
-  int** edges; // n by n edge array
+  unsigned char** edges; // n by n edge array
 } Graph;
 
 // Constructor and destructor
