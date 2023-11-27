@@ -1,4 +1,4 @@
 rm -f pcomp *.o output?
 gcc -std=c99 -Wall -Wshadow -Wno-unused-parameter --pedantic -Wvla -Werror -fopenmp -lm -O3 main.c graphs.c utils.c network.c -o pcomp
-/var/spool/slurm/job28565731/slurm_script: line 15: 123837 Killed                  ./pcomp
-slurmstepd: error: Detected 5 oom-kill event(s) in StepId=28565731.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.
+/var/spool/slurm/job28571625/slurm_script: line 15: 95914 Killed                  ./pcomp
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=28571625.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.

@@ -5,6 +5,7 @@
 //
 
 #include "graphs.h"
+#define LOG_FILENAME "log.log"
 
 typedef struct _Network {
   int size;            // size of network

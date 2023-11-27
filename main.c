@@ -8,7 +8,7 @@
 #include "network.h"
 #include "utils.h"
 
-#define GRAPH_SIZE 10000
+#define GRAPH_SIZE 2000
 #define MEAN_SPARSITY_MIN 0.01
 #define MEAN_SPARSITY_MAX 0.99
 #define MEAN_SPARSITY_INC 0.01
@@ -16,14 +16,14 @@
 #define TRIALS_PER_GRAPH 40
 
 #define END_TIME 10.0
-#define STEPS 10000
+#define STEPS 100000
 
 #define PUMP_RATE 0.9
 #define COUPLING_COEFFICIENT 0.1
-#define NOISE 0.001
+#define NOISE 0.01
 
 int main(int argc, char ** argv) {
-  omp_set_num_threads(1);
+  omp_set_num_threads(64);
 
   Graph* graph;
   Network* network;

@@ -173,10 +173,8 @@ void kraymer_moyal (Network* network) {
   #pragma omp parallel for schedule(dynamic, 50)
   for (i = 0; i < network -> size; i++) {
     dsdt[i] += (-1 - p - (c[i]*c[i] + s[i]*s[i])) * s[i];
-    // printf("%d: %lf\n", T++, dsdt[i]);
     for (int j = 0; j < network -> size; j++) {
       dsdt[i] += (network -> couplings)[i][j] * s[j];
-      // printf("%d: %lf %lf %lf\n", T++, dsdt[i], (network -> couplings)[i][j], s[j]);
     }
   }
 }
@@ -193,7 +191,6 @@ void euler_maruyama(Network* network, double h) {
 
   // #pragma omp parallel for schedule(dynamic, 50)
   for (int i = 0; i < network -> size; i++) {
-    // printf("C[%d] = %lf :: DCDT[%d] = %lf\n", i, c[i], i, dcdt[i]);
     c[i] += dcdt[i] * h + (network -> noise) * rand_norm(0, sqrt_h);
   }
 
@@ -209,6 +206,9 @@ void network_run(Network* network, Graph* graph, double time_final, int steps) {
     exit(1);
   }
 
+  FILE* fp = fopen(LOG_FILENAME, "w");
+  fclose(fp);
+
   for (int i = 0; i < network -> size; i++) {
     (network -> c)[i] = 0.0;
     (network -> s)[i] = 0.0;
@@ -223,13 +223,16 @@ void network_run(Network* network, Graph* graph, double time_final, int steps) {
       
       network_get_partition_array(network);
       int cut = evaluate_cut(*graph, network -> partition_array);
-      
-      printf("%03d%% | ELAPSED: %03d:%02d:%02d, ETA: %03d:%02d:%02d | %10d\n", 
+     
+    
+      fp = fopen(LOG_FILENAME, "a");
+      fprintf(fp, "%03d%% | ELAPSED: %03d:%02d:%02d, ETA: %03d:%02d:%02d | %10d\n", 
         (int) ((float) i / steps * 100),
         time_past / 3600, time_past / 60 % 60, time_past % 60,
         time_predicted / 3600, time_predicted / 60 % 60, time_predicted % 60,
         cut
       );
+      fclose(fp);
     }
     (network -> solver)(network, h);
   }
